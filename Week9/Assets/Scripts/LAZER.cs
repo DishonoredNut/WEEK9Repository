@@ -1,46 +1,47 @@
-/*using UnityEngine;
-using Mirror; 
+using UnityEngine;
+using Mirror;
 
 public class LAZER : NetworkBehaviour
 {
     public Transform LazerTransform;
-    public TrailRenderer LazerBeam; 
+    public TrailRenderer LazerBeam;
 
     // Update is called once per frame
     void Update()
     {
         if (isLocalPlayer && Input.GetMouseButtonDown(0))
         {
-            Shoot(); 
+            Shoot();
         }
         else if (!isLocalPlayer)
         {
-            return; 
+            return;
         }
     }
 
     public void Shoot()
     {
-        Ray ray = new Ray (LazerTransform.position, LazerTransform.forward); //set raycast spawn position 
+        Ray ray = new Ray(LazerTransform.position, LazerTransform.forward); // Set raycast spawn position
 
-        TrailRenderer beam = Instantiate(lazerBeam, lazerBeam.position, Quaternion.identity); // Creates a new beam game object
+        TrailRenderer beam = Instantiate(LazerBeam, LazerTransform.position, Quaternion.identity); // Creates a new beam game object
 
-        beam.AddPosition(lazerTransform.position); // set position of the beam to start at the laser transform
+        beam.Clear(); // Clear any previous points in the trail renderer
 
-        if (Physics.Raycast(ray, out RayCastHit hit, 50f))
+        beam.AddPosition(LazerTransform.position); // Set the position of the beam to start at the laser transform
+
+        if (Physics.Raycast(ray, out RaycastHit hit, 50f))
         {
-            beam.transform.postion = hit.point;
-            
-            Var=PlayerHealth = hit.collider.gameObject.GetComponent<PlayerHealth>();
-            if (PlayerHealth)
+            beam.transform.position = hit.point;
+
+            PlayerHealth playerHealth = hit.collider.gameObject.GetComponent<PlayerHealth>();
+            if (playerHealth)
             {
-                PlayerHealth.Damage(20); 
+                playerHealth.Damage(20);
             }
-            
         }
-          else
+        else
         {
-            beam.transform.position = LazerTransform.position + (LazerTransform.forward * 20f); 
+            beam.transform.position = LazerTransform.position + (LazerTransform.forward * 20f);
         }
-    }      
-}*/
+    }
+}
